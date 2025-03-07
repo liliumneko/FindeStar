@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FindeStar-Navigation Page With Network Discovery</title>
+    <link rel="icon" id="favicon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        /* 容器 */
+        .container {
+            width: 400px;
+            max-width: 90%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* 头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: #333;
+            text-align: left;
+        }
+
+        .logo {
+            font-size: 28px;
+        }
+
+        .ip-info {
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        /* 网址列表容器 */
+        .list-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* 美化滚动条 */
+        .list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .list-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .list-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        /* 网址列表 */
+        .web-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .web-list li {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .web-list a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+            padding: 20px 22px;
+            border-radius: 8px;
+            transition: opacity 0.5s ease, transform 0.3s ease-out;
+        }
+
+        .web-list li:hover a {
+            background-color: #e3e8ef;
+            transform: scale(0.98);
+        }
+
+        /* 图标 */
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+
+        /* 空状态 */
+        .empty {
+            font-size: 16px;
+            color: #999;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* 深色模式 */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #181818;
+            }
+            .container {
+                background-color: #242424;
+            }
+            .header h1, .ip-info {
+                color: #ddd;
+            }
+            .web-list a {
+                color: #ddd;
+                background-color: #333;
+            }
+            .web-list li:hover a {
+                background-color: #444;
+            }
+            .empty {
+                color: #777;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>FindeStar</h1>
+            <span class="logo">🌟</span>
+        </div>
+
+        <p class="ip-info">This machine IP is: <strong>{{ .ip }}</strong></p>
+
+        <!-- 网址列表 -->
+        <div class="list-container">
+            {{ if .noServices }}
+                <p class="empty">No web service was found, please check if the service is running or the port is not configured correctly.</p>
+            {{ else }}
+                <ul class="web-list">
+                    {{ range .webServices }}
+                        <li>
+                            <a href="{{ .link }}" target="_blank">
+                                <img class="icon" src="{{ .icon }}" alt="🌐">
+                                {{ .title }} Run on:{{ .port }}
+                            </a>
+                        </li>
+                    {{ end }}
+                </ul>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>
